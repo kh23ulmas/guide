@@ -1,0 +1,31 @@
+Please use the following install procedure instead:
+
+# How to install printer drivers for HP Laserjet P1005 in Ubuntu 14.04 LTS 64-bit without needing access to openprinting.org website and without using buggy hplip drivers
+
+#List of printers supported by foo2zjs printer driver: http://foo2zjs.rkkda.com/
+# Copy-paste following Terminal commands one by one into the Terminal:
+
+ sudo apt-get update
+ sudo apt-get remove hplip cups-filters cups hplip-data system-config-printer-udev
+ sudo apt-get install build-essential tix groff dc axel cups
+ sudo apt-get install cups-filters unp system-config-printer-gnome
+ sudo rm -rf /usr/share/hplip
+ cd /tmp
+ rm foo*
+ axel http://foo2zjs.rkkda.com/foo2zjs.tar.gz
+ unp foo2zjs.tar.gz
+ cd foo2zjs/
+ make
+ ./getweb P1005 # Get HP LaserJet P1005 firmware file !!!!!!!!!!!!!!
+ sudo make install
+ sudo make install-hotplug
+ # Unplug and re-plug the USB printer into the PC
+ # add new HP Laserjet P1005 printer via system-config-printer tool
+ # and choose to use foo2zjs foomatic printer driver :
+ system-config-printer
+ # check /var/log/syslog for any errors related to foo2zjs driver:
+ tail /var/log/syslog
+# Then power cycle both your PC and your HP printer Then retest printing using the newly installed foo2zjs driver This procedure should solve the hplip driver error "Device Communication Error,
+# code 5012" Source: https://answers.launchpad.net/hplip/+question/249391
+
+#Based on https://mark911.wordpress.com/2014/10/31/how-to-install-printer-drivers-for-hp-laserjet-1020-in-ubuntu-14-04-lts-without-needing-access-to-openprinting-org-website/
